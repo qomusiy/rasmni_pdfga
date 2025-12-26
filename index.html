@@ -9,52 +9,130 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <style>
+    /* Custom minimalistic styles */
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .drop-zone-hover { @apply border-blue-400 bg-blue-50/50 transition-all duration-200; }
+    .thumbnail-hover { @apply scale-105 transition-transform duration-200; }
+    .btn-primary { @apply bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200; }
+    .btn-secondary { @apply bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-all duration-200; }
+    .modal-enter { animation: modalEnter 0.2s ease-out; }
+    @keyframes modalEnter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-white via-gray-50 to-white min-h-screen">
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useRef } = React;
 
     const translations = {
+      uz_cyrl: {
+        title: "Расмни PDFга айлантириш",
+        subtitle: "Осон ва тез",
+        about: "Хақида",
+        dragDrop: "Расмларни бу ерга ташланг ёки",
+        selectImages: "📁 Расмларни танлаш",
+        convert: "PDFга айлантириш",
+        errorEmpty: "Илтимос, камида битта расм юкланг.",
+        errorInvalid: "Айрим файллар рад этилди. Фақат JPEG, PNG ва GIF қўллаб-қувватланади.",
+        remove: "🗑️ Ўчириш",
+        namePrompt: "PDF файлингиз учун ном киритинг (.pdf кенгайтмасиз):",
+        namePlaceholder: "МенингҲужжатим",
+        aboutTitle: "Расмни PDFга айлантириш",
+        aboutDescription: "Бу оддий веб-илова расмларингизни PDF ҳужжатга ўзгартириш учун яратилган. Расмларни юклаш, тартибни ўзгартириш ва PDF яратиш осон.",
+        aboutFeatures: [
+          "Drag-and-drop юклаш",
+          "Расмлар тартибини ўзгартириш (drag режаида)",
+          "Расмни ўчириш",
+          "Кўп тилли қўллаб-қувватлаш",
+          "JPEG, PNG ва GIF форматиларни қўллаб-қувватлаш"
+        ],
+        aboutVersion: "Версия 1.0",
+        aboutAuthor: "Qomusiy томонидан яратилган",
+        close: "Ёпиш"
+      },
       en: {
         title: "Image to PDF Converter",
+        subtitle: "Effortless image merging",
+        about: "About",
         dragDrop: "Drag and drop images here or",
-        selectImages: "Select Images",
+        selectImages: "📁 Select Images",
         convert: "Convert to PDF",
         errorEmpty: "Please upload at least one image.",
         errorInvalid: "Some files were rejected. Only JPEG, PNG, and GIF are supported.",
-        remove: "Remove",
+        remove: "🗑️ Remove",
         namePrompt: "Enter the name for your PDF file (without .pdf extension):",
-        namePlaceholder: "MyDocument"
+        namePlaceholder: "MyDocument",
+        aboutTitle: "Image to PDF Converter",
+        aboutDescription: "This simple web app is designed to convert your images into a PDF document. Easily upload, reorder, and generate your PDF.",
+        aboutFeatures: [
+          "Drag-and-drop upload",
+          "Reorder images (drag mode)",
+          "Remove images",
+          "Multi-language support",
+          "Supports JPEG, PNG, and GIF formats"
+        ],
+        aboutVersion: "Version 1.0",
+        aboutAuthor: "Created by Qomusiy",
+        close: "Close"
       },
       uz: {
         title: "Rasmni PDFga aylantirish",
+        subtitle: "Oson va tez",
+        about: "Haqida",
         dragDrop: "Rasmlarni bu yerga tashlang yoki",
-        selectImages: "Rasmlarni tanlash",
+        selectImages: "📁 Rasmlarni tanlash",
         convert: "PDFga aylantirish",
         errorEmpty: "Iltimos, kamida bitta rasm yuklang.",
         errorInvalid: "Ba'zi fayllar rad etildi. Faqat JPEG, PNG va GIF qo'llab-quvvatlanadi.",
-        remove: "O'chirish",
+        remove: "🗑️ O'chirish",
         namePrompt: "PDF faylingiz uchun nom kiriting (.pdf kengaytmasiz):",
-        namePlaceholder: "MeningHujjatim"
+        namePlaceholder: "MeningHujjatim",
+        aboutTitle: "Rasmni PDFga aylantirish",
+        aboutDescription: "Bu oddiy veb-ilova rasmlaringizni PDF hujjatga o'zgartirish uchun yaratilgan. Rasmlarni yuklash, tartibni o'zgartirish va PDF yaratish oson.",
+        aboutFeatures: [
+          "Drag-and-drop yuklash",
+          "Rasmlar tartibini o'zgartirish (drag rejimida)",
+          "Rasmni o'chirish",
+          "Ko'p tilli qo'llab-quvvatlash",
+          "JPEG, PNG va GIF formatlarini qo'llab-quvvatlash"
+        ],
+        aboutVersion: "Versiya 1.0",
+        aboutAuthor: "Qomusiy tomonidan yaratilgan",
+        close: "Yopish"
       },
       ru: {
         title: "Конвертер изображений в PDF",
+        subtitle: "Просто и быстро",
+        about: "О программе",
         dragDrop: "Перетащите изображения сюда или",
-        selectImages: "Выбрать изображения",
+        selectImages: "📁 Выбрать изображения",
         convert: "Конвертировать в PDF",
         errorEmpty: "Пожалуйста, загрузите хотя бы одно изображение.",
         errorInvalid: "Некоторые файлы были отклонены. Поддерживаются только JPEG, PNG и GIF.",
-        remove: "Удалить",
+        remove: "🗑️ Удалить",
         namePrompt: "Введите имя для вашего PDF-файла (без расширения .pdf):",
-        namePlaceholder: "МойДокумент"
+        namePlaceholder: "МойДокумент",
+        aboutTitle: "Конвертер изображений в PDF",
+        aboutDescription: "Это простое веб-приложение предназначено для преобразования ваших изображений в PDF-документ. Легко загружайте, переупорядочивайте и генерируйте PDF.",
+        aboutFeatures: [
+          "Перетаскивание для загрузки",
+          "Переупорядочивание изображений (режим перетаскивания)",
+          "Удаление изображений",
+          "Поддержка нескольких языков",
+          "Поддержка форматов JPEG, PNG и GIF"
+        ],
+        aboutVersion: "Версия 1.0",
+        aboutAuthor: "Создано Qomusiy",
+        close: "Закрыть"
       }
     };
 
     const App = () => {
       const [images, setImages] = useState([]);
       const [error, setError] = useState('');
-      const [language, setLanguage] = useState('uz');
+      const [language, setLanguage] = useState('uz_cyrl');
+      const [showAbout, setShowAbout] = useState(false);
       const fileInputRef = useRef(null);
       const dropZoneRef = useRef(null);
       const dragItemRef = useRef(null);
@@ -81,17 +159,17 @@
 
       const handleDrop = (e) => {
         e.preventDefault();
-        dropZoneRef.current.classList.remove('border-blue-500');
+        dropZoneRef.current.classList.remove('drop-zone-hover');
         handleFiles(e.dataTransfer.files);
       };
 
       const handleDragOver = (e) => {
         e.preventDefault();
-        dropZoneRef.current.classList.add('border-blue-500');
+        dropZoneRef.current.classList.add('drop-zone-hover');
       };
 
       const handleDragLeave = () => {
-        dropZoneRef.current.classList.remove('border-blue-500');
+        dropZoneRef.current.classList.remove('drop-zone-hover');
       };
 
       const handleFileInput = (e) => {
@@ -156,7 +234,8 @@
           return;
         }
 
-        const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '') || 'images';
+        // Improved sanitization: Replace invalid filename characters with underscores, keep spaces and most others
+        const sanitizedFileName = fileName.replace(/[<>:"/\\|?*]/g, '_').trim() || 'images';
 
         const { PDFDocument } = PDFLib;
         const pdfDoc = await PDFDocument.create();
@@ -199,29 +278,46 @@
       };
 
       return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6">
-          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-4xl">
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl sm:text-2xl font-bold">{t.title}</h1>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="border rounded px-2 py-1 text-sm"
-              >
-                <option value="uz">Oʻzbek</option>
-                <option value="en">English</option>
-                <option value="ru">Русский</option>
-              </select>
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+          <div className="max-w-2xl mx-auto">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 space-y-4 sm:space-y-0">
+              <div className="text-center sm:text-left">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extralight tracking-wide text-gray-900">
+                  {t.title}
+                </h1>
+                <p className="mt-2 text-sm text-gray-500 font-light">{t.subtitle}</p>
+              </div>
+              <div className="flex items-center space-x-3 w-full sm:w-auto justify-end sm:justify-start">
+                <button
+                  onClick={() => setShowAbout(true)}
+                  className="btn-secondary text-sm flex items-center space-x-1"
+                >
+                  <span>ℹ️</span>
+                  <span>{t.about}</span>
+                </button>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="uz_cyrl">Ўзбекча (Кирилл)</option>
+                  <option value="uz">Oʻzbek</option>
+                  <option value="en">English</option>
+                  <option value="ru">Русский</option>
+                </select>
+              </div>
             </div>
 
+            {/* Drop Zone */}
             <div
               ref={dropZoneRef}
-              className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 mb-4 text-center"
+              className="border-2 border-dashed border-gray-300 rounded-2xl p-6 sm:p-8 mb-6 text-center transition-all duration-200 hover:border-gray-400"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
             >
-              <p className="text-gray-500 mb-2 text-sm sm:text-base">{t.dragDrop}</p>
+              <p className="text-gray-500 mb-4 text-base sm:text-lg font-medium">{t.dragDrop}</p>
               <input
                 type="file"
                 multiple
@@ -232,59 +328,110 @@
               />
               <button
                 onClick={() => fileInputRef.current.click()}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm sm:text-base"
+                className="btn-primary text-base"
               >
                 {t.selectImages}
               </button>
             </div>
 
+            {/* Error */}
             {error && (
-              <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm sm:text-base">
+              <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-6 text-sm">
                 {error}
               </div>
             )}
 
+            {/* Thumbnails Grid */}
             {images.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 mb-4">
-                {images.map((image, index) => (
-                  <div
-                    key={image.id}
-                    data-index={index}
-                    className="relative group cursor-move touch-none"
-                    draggable
-                    onDragStart={() => handleDragStart(index)}
-                    onDragEnter={() => handleDragEnter(index)}
-                    onDragEnd={handleDragEnd}
-                    onTouchStart={() => handleTouchStart(index)}
-                    onTouchMove={(e) => handleTouchMove(e, index)}
-                    onTouchEnd={handleTouchEnd}
-                  >
-                    <img
-                      src={image.url}
-                      alt="Thumbnail"
-                      className="w-full h-24 sm:h-32 object-cover rounded"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded">
-                      <button
-                        onClick={() => removeImage(image.id)}
-                        className="bg-red-500 text-white px-2 py-1 rounded text-xs sm:text-sm"
-                      >
-                        {t.remove}
-                      </button>
+              <div className="mb-8">
+                <p className="text-sm font-medium text-gray-600 mb-4">{images.length} {images.length === 1 ? 'image selected' : 'images selected'}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                  {images.map((image, index) => (
+                    <div
+                      key={image.id}
+                      data-index={index}
+                      className="relative group cursor-move touch-none rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 thumbnail-hover"
+                      draggable
+                      onDragStart={() => handleDragStart(index)}
+                      onDragEnter={() => handleDragEnter(index)}
+                      onDragEnd={handleDragEnd}
+                      onTouchStart={() => handleTouchStart(index)}
+                      onTouchMove={(e) => handleTouchMove(e, index)}
+                      onTouchEnd={handleTouchEnd}
+                    >
+                      <img
+                        src={image.url}
+                        alt="Thumbnail"
+                        className="w-full h-20 sm:h-24 lg:h-28 object-cover"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 rounded-xl">
+                        <button
+                          onClick={() => removeImage(image.id)}
+                          className="bg-red-500 text-white px-3 py-1.5 rounded-md text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          {t.remove}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
+            {/* Convert Button */}
             <button
               onClick={generatePDF}
-              className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-gray-400 text-sm sm:text-base"
+              className="w-full btn-primary text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-500 flex items-center justify-center space-x-2"
               disabled={images.length === 0}
             >
-              {t.convert}
+              <span>⬇️</span>
+              <span>{t.convert} ({images.length || 0})</span>
             </button>
           </div>
+
+          {/* About Modal */}
+          {showAbout && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onClick={() => setShowAbout(false)}>
+              <div 
+                className="bg-white rounded-2xl shadow-2xl max-w-sm w-full max-h-[80vh] overflow-y-auto modal-enter relative" 
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-light text-gray-900">{t.aboutTitle}</h2>
+                    <button
+                      onClick={() => setShowAbout(false)}
+                      className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{t.aboutDescription}</p>
+                  <div className="mb-6">
+                    <h3 className="font-medium mb-3 text-gray-900">Имкониятлар</h3>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                      {t.aboutFeatures.map((feature, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="text-xs text-gray-500 space-y-1 mb-6">
+                    <p className="font-medium">{t.aboutVersion}</p>
+                    <p>{t.aboutAuthor}</p>
+                  </div>
+                  <button
+                    onClick={() => setShowAbout(false)}
+                    className="w-full btn-secondary"
+                  >
+                    {t.close}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
     };
